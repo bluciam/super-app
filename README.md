@@ -1,4 +1,4 @@
-# Ruby on Rails Tutorial: sample application
+# Ruby on Rails Tutorial: sample app
 
 The one that is going to teach me all sorts of things!
 
