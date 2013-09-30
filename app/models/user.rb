@@ -1,9 +1,18 @@
 class User < ActiveRecord::Base
   # A callback to endure that the email is saved in lowercase
-  before_save { self.email = email.downcase }
+  has_secure_password
+  before_save { email.downcase! }
+#  before_save { self.email = email.downcase }
   # A validation formula for the attribute name
   validates :name, presence: true, length: { maximum: 50 }
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+
+  #original
+#  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  #mine
+#  VALID_EMAIL_REGEX = /\A[\w+\-.]+@([a-z\d\-]+\.?)+[a-z\d\-]+\.[a-z]+/i
+  # solution in Listing 6.32
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
+
   # A validation formula for the attribute email, including following a format
   # and inforcing uniques (translated into an index in the database
   validates :email, presence: true,
@@ -14,5 +23,4 @@ class User < ActiveRecord::Base
   # Presence validation for password and its confirmation are ensured by the
   # next line, which also requires that the two match by comparing encryptions,
   # as it add the authenticate method.
-  has_secure_password
 end
