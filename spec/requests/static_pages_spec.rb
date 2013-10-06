@@ -52,7 +52,7 @@ describe "Static Pages" do
     click_link "Home"
     click_link "Sign up now!"
     expect(page).to have_title(full_title('Sign up'))
-    click_link "sample app"
+    click_link "my rails tour"
     expect(page).to have_title(full_title(''))
   end
 
