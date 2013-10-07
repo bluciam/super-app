@@ -1,26 +1,28 @@
 class User < ActiveRecord::Base
-  # A callback to endure that the email is saved in lowercase
   has_secure_password
   before_save { email.downcase! }
-#  before_save { self.email = email.downcase }
-  # A validation formula for the attribute name
+  before_create :create_remember_token
+
   validates :name, presence: true, length: { maximum: 50 }
 
-  #original
-#  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
-  #mine
-#  VALID_EMAIL_REGEX = /\A[\w+\-.]+@([a-z\d\-]+\.?)+[a-z\d\-]+\.[a-z]+/i
-  # solution in Listing 6.32
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
 
-  # A validation formula for the attribute email, including following a format
-  # and inforcing uniques (translated into an index in the database
   validates :email, presence: true,
                     format: { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
-  # Ensures that the password is at least 6 characters
   validates :password, length: { minimum: 6 }
-  # Presence validation for password and its confirmation are ensured by the
-  # next line, which also requires that the two match by comparing encryptions,
-  # as it add the authenticate method.
+
+  def User.new_remember_token
+    SecureRandom.urlsafe_base64
+  end
+
+  def User.encrypt(token)
+    Digest::SHA1.hexdigest(token.to_s)
+  end
+
+  private
+
+    def create_remember_token
+      self.remember_token = User.encrypt(User.new_remember_token)
+    end
 end
