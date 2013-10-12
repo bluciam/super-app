@@ -26,3 +26,9 @@ class User < ActiveRecord::Base
       self.remember_token = User.encrypt(User.new_remember_token)
     end
 end
+
+# begin generate_token(column)
+#   begin
+#     self[column] =  SecureRandom.urlsafe_base64
+#   end while User.exist?(column => self[column]
+# end
