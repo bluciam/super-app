@@ -18,5 +18,12 @@
       <%= render 'layouts/footer' %>
       <%= debug(params) if Rails.env.development? %>
     </div>
+    <div class="container">
+      <% if !Rails.env.developement? %>
+        <%= link_to "Rails API: request", "http://api.rubyonrails.org/v4.0.0/classes/ActionDispatch/Request.html", target: "_blank" %><br>
+        <%= request.cookie_jar() %><br>
+        <%= request.ip() %>
+      <% end %>
+    </div>
   </body>
 </html>

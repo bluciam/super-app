@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe User do
-#  pending "add some examples to (or delete) #{__FILE__}"
   before do  @user = User.new(name: "Example User", email: "user@example.com",
                           password: "foobar", password_confirmation: "foobar" )
   end

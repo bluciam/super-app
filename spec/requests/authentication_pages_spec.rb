@@ -46,23 +46,44 @@ describe "Authentication" do
       describe "when attempting to visit a protected page" do
         before do
           visit edit_user_path(user)
-          fill_in "Email",  with: user.email
-          fill_in "Password", with: user.password
-          click_button "Sign in"
+          sign_in user
+#          fill_in "Email",  with: user.email
+#          fill_in "Password", with: user.password
+#          click_button "Sign in"
         end
 
         describe "after signing in" do
           it "should render the desired protected page" do
             expect(page).to have_title("Edit user")
           end
+
+          describe "after second attempt to sign in" do
+            before do
+              delete signout_path
+              visit signin_path
+              fill_in "Email", with: user.email
+              fill_in "Password", with: user.password
+              click_button "Sign in"
+#              sign_in user
+            end
+
+            it "should render profile page, the default" do
+              expect(page).to have_title(user.name)
+            end
+          end
         end
       end
 
       describe "in the Users controller" do
+        before { visit root_path }
+        it { should_not have_link("Profile") }
+        it { should_not have_link("Settings") }
         
         describe "visiting the edit page" do
           before { visit edit_user_path(user) }
           it { should have_title("Sign in") }
+          it { should_not have_link("Profile") }
+          it { should_not have_link("Settings") }
         end
 
         describe "submitting to the update action" do
@@ -73,6 +94,8 @@ describe "Authentication" do
         describe "visiting the user index" do
           before { visit users_path }
           it { should have_title('Sign in') }
+          it { should_not have_link("Profile") }
+          it { should_not have_link("Settings") }
         end
       end
     end
