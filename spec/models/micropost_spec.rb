@@ -19,4 +19,13 @@ describe Micropost do
     it { should_not be_valid }
   end
     
+  describe "when content is empty" do
+    before { @micropost.content = " " }
+    it { should_not be_valid }
+  end
+
+  describe "when content is more than 140 characters" do
+    before { @micropost.content = 'a' * 141 }
+    it { should_not be_valid }
+  end
 end

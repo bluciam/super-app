@@ -109,15 +109,6 @@ describe "User Pages" do
     it { should have_title(full_title('Sign up')) }
   end
 
-  describe "profile page" do
-    let(:user) { FactoryGirl.create(:user) }
-    before { visit user_path(user) }
-
-    it { should have_content(user.name) }
-    it { should have_title(user.name) }
-  end
-
-
   describe "edit" do
     let(:user) { FactoryGirl.create(:user) }
     before do
@@ -165,6 +156,37 @@ describe "User Pages" do
         patch user_path(user), params
       end
       specify { expect(user.reload).not_to be_admin }
+    end
+
+  end
+
+  describe "profile page" do
+    let(:user) { FactoryGirl.create(:user) }
+    let!(:m1)  { FactoryGirl.create(:micropost, user: user, content: "Foo") }
+    let!(:m2)  { FactoryGirl.create(:micropost, user: user, content: "Bar") }
+
+    let!(:m3)  { FactoryGirl.create(:micropost, user: user, content: "Bas") }
+    let!(:m4)  { FactoryGirl.create(:micropost, user: user, content: "Bas") }
+    let!(:m5)  { FactoryGirl.create(:micropost, user: user, content: "Bas") }
+    let!(:m6)  { FactoryGirl.create(:micropost, user: user, content: "Bas") }
+    let!(:m7)  { FactoryGirl.create(:micropost, user: user, content: "Bas") }
+    let!(:m8)  { FactoryGirl.create(:micropost, user: user, content: "Bas") }
+    let!(:m9)  { FactoryGirl.create(:micropost, user: user, content: "Bas") }
+    let!(:ma)  { FactoryGirl.create(:micropost, user: user, content: "Bas") }
+    let!(:mb)  { FactoryGirl.create(:micropost, user: user, content: "Bas") }
+    let!(:mc)  { FactoryGirl.create(:micropost, user: user, content: "Bas") }
+    let!(:md)  { FactoryGirl.create(:micropost, user: user, content: "Bas") }
+    let!(:me)  { FactoryGirl.create(:micropost, user: user, content: "Bas") }
+
+    before { visit user_path(user) }
+
+    it { should have_content(user.name) }
+    it { should have_title(user.name) }
+    
+    describe "micropost" do
+      it { should have_content(m1.content) }
+      it { should have_content(m2.content) }
+      it { should have_content(user.microposts.count) }
     end
 
   end

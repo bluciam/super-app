@@ -23,6 +23,13 @@ module SessionsHelper
   def current_user?(user)
     user == current_user
   end
+  
+  def signed_in_user
+    unless signed_in?
+      store_location
+      redirect_to signin_url, notice: "Please sign in."
+    end
+  end
 
   def sign_out
     self.current_user = nil
@@ -33,13 +40,6 @@ module SessionsHelper
   def redirect_back_or(default)
     redirect_to(session[:return_to] || default)
     session.delete(:return_to)
- #   if session[:return_to] 
- #     temp = session[:return_to]
- #     session.delete(:return_to)
- #     redirect_to temp
- #   else
- #     redirect_to default
- #   end
   end
 
   def store_location
