@@ -19,17 +19,51 @@ describe "Static Pages" do
     describe "for signed-in users" do
       let(:user) { FactoryGirl.create(:user) }
       before do
-        FactoryGirl.create(:micropost, user: user, content: "Guten Tag")
+        FactoryGirl.create(:micropost, user: user, content: "Schöne Ostern")
         FactoryGirl.create(:micropost, user: user, content: "Frohe Ostern")
         sign_in user
         visit root_path
       end
-      
+
       it "should render the user's feed" do
         user.feed.each do |item|
           expect(page).to have_selector("li##{item.id}", text: item.content)
         end
       end
+
+#      it "should render other user's feed without delete link" do
+#        user.feed.each do |item|
+#          expect(page).to have_selector("li##{item.id}", text: item.content)
+#        end
+#      end
+
+      describe "show correct number of microposts (plural)" do
+        it { should have_content(user.microposts.count.to_s() + " micropost") }
+      end
+
+## Commented out due to the gizillion warning messages
+#      describe "microposts pagination" do
+#        before(:all) do 
+##           user = FactoryGirl.create(:user)
+#           30.times {
+#           FactoryGirl.create(:micropost, user: user, content: "Alles Gute") } 
+#        end
+#        after(:all) { Micropost.delete_all }
+#        it { should have_selector('div.pagination') }
+#
+#      end
+
+    end
+
+    describe "show correct number of microposts (singular)" do
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        FactoryGirl.create(:micropost, user: user, content: "Prost Neujahr")
+        sign_in user
+        visit root_path
+      end
+      it { should have_content(user.microposts.count) }
+      it { should_not have_content("microposts") }
     end
 
   end

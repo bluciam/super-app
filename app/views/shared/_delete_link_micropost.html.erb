@@ -1,0 +1,7 @@
+  <% if current_user?(object.user) %>
+      <%= link_to "delete", object,
+          method: :delete,
+          data: { confirm: "Are you sure you want to delete me?" },
+          title: object.content %>
+                                                                                  <% end %>
+
